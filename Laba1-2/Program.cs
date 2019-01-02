@@ -8,7 +8,7 @@ namespace Laba1_2 {
     class Program {
         static void Main(string[] args) {
 
-            string a = "16D4CA8";
+            string a = "16D4C";
             string b = "0";
             a = Add0(a);
             b = Add0(b);
@@ -38,10 +38,12 @@ namespace Laba1_2 {
             
             var a32 = new ulong[a.Length / 8];
             for (int i=0; i < a.Length; i += 8) {
-                a32[i / 8] = Convert.ToUInt64(a.Substring(i, 8), 16);
+                a32[i / 8] = Convert.ToUInt32(a.Substring(i, 8), 16);
+                a_mass[i / 8] = a32[i / 8];
                 Array.Reverse(a32);
+                Array.Reverse(a_mass);
             }
-            return a32;
+            return a_mass;
         } 
 
 
