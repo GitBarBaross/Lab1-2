@@ -40,14 +40,7 @@ namespace Laba1_2 {
 
 
 
-        public static string Del0(string h) {
-            h = h.TrimStart('0');
-            
-            
-
-            return h;
-        }
-
+      
         public static ulong[] ToArr(string a, ulong[] a_mass) {
 
             var a32 = new ulong[a.Length / 8];
