@@ -9,7 +9,7 @@ namespace Laba1_2 {
         static void Main(string[] args) {
 
             string a = "16D4C";
-            string b = "0";
+            string b = "16D4CA8";
             a = Add0(a);
             b = Add0(b);
 
@@ -34,24 +34,33 @@ namespace Laba1_2 {
             return a;
         }
 
-        public static ulong[] ToArr(string a, ulong[] a_mass) {
 
-            var a32 = new ulong[a.Length / 8];
-            for (int i = 0; i < a.Length; i += 8) {
-                a32[i / 8] = Convert.ToUInt64(a.Substring(i, 8), 16);
-                a_mass[i / 8] = a32[i / 8];
+        public static string Del0(string h) {
+
+            
+
+
+            return h;
+        }
+
+        public static ulong[] ToArr(string c, ulong[] a) {
+
+            var a32 = new ulong[c.Length / 8];
+            for (int i = 0; i < c.Length; i += 8) {
+                a32[i / 8] = Convert.ToUInt64(c.Substring(i, 8), 16);
+                a[i / 8] = a32[i / 8];
                 Array.Reverse(a32);
-                Array.Reverse(a_mass);
+                Array.Reverse(a);
             }
-            return a_mass;
+            return a;
         }
 
 
 
-        public static string ToStr(ulong[] b_mass) {
+        public static string ToStr(ulong[] b) {
             string x = null;
-            for (int i = 0; i < b_mass.Length; i++) {
-                x = (b_mass[i].ToString("X").PadLeft(8, '0')) + x;
+            for (int i = 0; i < b.Length; i++) {
+                x = (b[i].ToString("X").PadLeft(8, '0')) + x;
             }
          
             return x;
