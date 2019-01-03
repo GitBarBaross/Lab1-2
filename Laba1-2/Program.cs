@@ -18,9 +18,9 @@ namespace Laba1_2 {
             var b_mass = new ulong[b.Length / 8];
             a_mass = ToArr(a, a_mass);
             b_mass = ToArr(b, b_mass);
-            string a1 = ToStr(a_mass);
-            Console.WriteLine(a_mass);
-            Console.WriteLine(a1);
+            string b1 = ToStr(b_mass);
+            Console.WriteLine(b_mass);
+            Console.WriteLine(b1);
             Console.ReadKey();
 
 
@@ -48,10 +48,10 @@ namespace Laba1_2 {
 
 
 
-        public static string ToStr(ulong[] a_mass) {
+        public static string ToStr(ulong[] b_mass) {
             string x = null;
-            for (int i = 0; i < a_mass.Length; i++) {
-                x = (a_mass[i].ToString("X").PadLeft(8, '0')) + x;
+            for (int i = 0; i < b_mass.Length; i++) {
+                x = (b_mass[i].ToString("X").PadLeft(8, '0')) + x;
             }
          
             return x;
