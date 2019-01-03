@@ -8,8 +8,8 @@ namespace Laba1_2 {
     class Program {
         static void Main(string[] args) {
 
-            string a = "5D13F5BFA0B1EF77EB53FCD7A258EA2D0BFBB3A36DAFE39BC966FC05EC3A8E7B";
-            string b = "C06EC1528543622E8E73155431AC20C77DDB2F0FF53B0FD364367D131579763E";
+            string a = "A962CB3129CF6D479D2574246BD15760B929D0F22122D8C77179A33109CAF6B7";
+            string b = "A1B8CFBCEB1BA7DC9FB51BE63DDDB3F6061C422F0F238E24EFC05197A20DB218";
             a = Add0(a);
             b = Add0(b);
           
@@ -47,9 +47,10 @@ namespace Laba1_2 {
             for (int i = 0; i < a.Length; i += 8) {
                 a32[i / 8] = Convert.ToUInt64(a.Substring(i, 8), 16);
                 a_mass[i / 8] = a32[i / 8];
-                Array.Reverse(a32);
-                Array.Reverse(a_mass);
+                
             }
+            Array.Reverse(a32);
+            Array.Reverse(a_mass);
             return a_mass;
         }
 
@@ -80,7 +81,7 @@ namespace Laba1_2 {
                 ot[i] = p & 0xffffffff;
                 
             }
-
+            ot[max] = carry;
             return ot;
 
         }
