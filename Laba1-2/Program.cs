@@ -8,8 +8,8 @@ namespace Laba1_2 {
     class Program {
         static void Main(string[] args) {
 
-            string a = "A962CB3129CF6D479D2574246BD15760B929D0F22122D8C77179A33109CAF6B7";
-            string b = "A1B8CFBCEB1BA7DC9FB51BE63DDDB3F6061C422F0F238E24EFC05197A20DB218";
+            string a = "58D42712A22E24D976B8322D2861283A5B0D603E7BA6E4E384645432C0BC70E7";
+            string b = "5E672E3509AA1256B1A78FA3FAAFD1BF47F1E62E7743DD5F67A12A2E5E200BFE";
             a = Add0(a);
             b = Add0(b);
           
@@ -17,10 +17,21 @@ namespace Laba1_2 {
             var b_mass = new ulong[b.Length / 8];
             a_mass = ToArr(a, a_mass);
             b_mass = ToArr(b, b_mass);
+
+            //sum
             var sum = new ulong[0];
             sum = AddLong(a_mass, b_mass);
             string summ = ToStr(sum);
-            Console.WriteLine(summ);
+            Console.WriteLine("Summ= " + summ);
+            //sub
+            var sub = new ulong[0];
+            sub = SubLong(a_mass, b_mass);
+            string subs = ToStr(sub);
+
+            if (subs != null) {
+                Console.WriteLine("Sub= " + subs);}
+            else { Console.WriteLine("you have negative number"); };
+            
             
            
             Console.ReadKey();
@@ -58,10 +69,14 @@ namespace Laba1_2 {
 
         public static string ToStr(ulong[] b) {
             string x = null;
-            for (int i = 0; i < b.Length; i++) {
-                x = (b[i].ToString("X").PadLeft(8, '0')) + x;
+            if (b != null) {
+                for (int i = 0; i < b.Length; i++) {
+                    x = (b[i].ToString("X").PadLeft(8, '0')) + x;
+                }
+                x = x.TrimStart('0');
             }
-            x = x.TrimStart('0');
+           
+            
             return x;
 
 
@@ -86,7 +101,30 @@ namespace Laba1_2 {
 
         }
 
+        public static ulong[] SubLong(ulong[] a, ulong[] b) {
+            ulong borrow = 0;
+            int max = 0;
+            if (a.Length < b.Length) { max = b.Length; }
+            else { max = a.Length; };
+            Array.Resize(ref a, max);
+            Array.Resize(ref b, max);
+            var diff = new ulong[max];
+            for (int i=0; i<max; i++) {
+                ulong p = a[i] - b[i] - borrow;
+                diff[i] = p & 0xffffffff;
+                if (b[i] < a[i]) { borrow = 0; }
+                else { borrow = 1;  };
+            }
+            if (borrow == 1) {
+                
+                 diff = null;
+            }
+           
+            
 
+
+            return diff;
+        }
 
     }
 }
