@@ -8,8 +8,8 @@ namespace Laba1_2 {
     class Program {
         static void Main(string[] args) {
 
-            string a = "58D42712A22E24D976B8322D2861283A5B0D603E7BA6E4E384645432C0BC70E7";
-            string b = "5E672E3509AA1256B1A78FA3FAAFD1BF47F1E62E7743DD5F67A12A2E5E200BFE";
+            string a = "29DF8974FB1571D55BE1379E242B825293844F5E1573AC521722D835989AC308CBB6F53508DC42062CEEAE16089F46E8265059F791F87775680B8087D4B8D54F8557B3472DC6BF47AC80FA667549A9F82CB1199EC99E0EF92E40C1FA8ADE5CAD76C35A9E93AF0F306C48700868FF2C6ED24961CD4667BC6AA2D8430E874A9CDB";
+            string b = "6C5C2905F1AE8C95C5A201B9F3561AA747899511C2A45CA6BBA3BF2F056514CD0009851D87A9A978E1D88EEE8C38D2806495B8F3C01D97DF718CB92247B3D4DAA4383AF7BDA40043BE87886B65F275D50C7886D65B4500E54AD7E2CDDA8BCF2A1DB38F38D884E78ACA7912DF485CBC4BFACCC29346C2D8ECD558F0E7C4149BC4";
             a = Add0(a);
             b = Add0(b);
           
@@ -30,10 +30,15 @@ namespace Laba1_2 {
 
             if (subs != null) {
                 Console.WriteLine("Sub= " + subs);}
-            else { Console.WriteLine("you have negative number"); };
-            
-            
-           
+            else { Console.WriteLine("you have negative number" +'\n' + "b > a"); };
+
+
+            //LongCmp
+            var Cmp = new ulong[0];
+            Cmp = LongCmp(a_mass, b_mass);
+
+
+
             Console.ReadKey();
 
 
@@ -112,12 +117,12 @@ namespace Laba1_2 {
             for (int i=0; i<max; i++) {
                 ulong p = a[i] - b[i] - borrow;
                 diff[i] = p & 0xffffffff;
-                if (b[i] < a[i]) { borrow = 0; }
+                if (b[i] <= a[i]) { borrow = 0; }
                 else { borrow = 1;  };
             }
             if (borrow == 1) {
-                
-                 diff = null;
+                if (a[max-1] == b[max-1]) { diff[1] = 0; }
+                else { diff = null; };
             }
            
             
@@ -126,6 +131,36 @@ namespace Laba1_2 {
             return diff;
         }
 
+
+
+        public static ulong[] LongCmp(ulong[] a, ulong[] b) {
+            ulong borrow = 0;
+            ulong borrow1 = 0;
+            int max = 0;
+            if (a.Length < b.Length) { max = b.Length; }
+            else { max = a.Length; };
+            Array.Resize(ref a, max+1);
+            Array.Resize(ref b, max+1);
+            var diff = new ulong[max];
+            for (int i = 0; i < max; i++) {
+                ulong p = a[i] - b[i] - borrow;
+                diff[i] = p & 0xffffffff;
+                if (b[i] < a[i]) { borrow = 0; }
+                else { borrow = 1; };
+
+            }
+            if (b[max-1] <= a[max-1]) { borrow1 = 0; }
+            else { borrow1 = 1; };
+
+            if (borrow == 0) { Console.WriteLine("a > b "); };
+            
+            if (borrow ==1 && a[max] - b[max] - borrow1 == 0 ) { Console.WriteLine("a = b"); }
+            
+
+
+
+            return null;
+        }
     }
 }
 
