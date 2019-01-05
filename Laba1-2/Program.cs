@@ -8,8 +8,8 @@ namespace Laba1_2 {
     class Program {
         static void Main(string[] args) {
 
-            string a = "29DF8974FB1571D55BE1379E242B825293844F5E1573AC521722D835989AC308CBB6F53508DC42062CEEAE16089F46E8265059F791F87775680B8087D4B8D54F8557B3472DC6BF47AC80FA667549A9F82CB1199EC99E0EF92E40C1FA8ADE5CAD76C35A9E93AF0F306C48700868FF2C6ED24961CD4667BC6AA2D8430E874A9CDB";
-            string b = "6C5C2905F1AE8C95C5A201B9F3561AA747899511C2A45CA6BBA3BF2F056514CD0009851D87A9A978E1D88EEE8C38D2806495B8F3C01D97DF718CB92247B3D4DAA4383AF7BDA40043BE87886B65F275D50C7886D65B4500E54AD7E2CDDA8BCF2A1DB38F38D884E78ACA7912DF485CBC4BFACCC29346C2D8ECD558F0E7C4149BC4";
+            string a = "9BCE528E8861A4BF2DE3F456AF796AA98A61FA41801B8EF0AAAE70C8F2789A20";
+            string b = "24A7D07FF51A35F2D09D075CBD3851D7C4B858E2D3C20543893D7985EEC2FEF0";
             a = Add0(a);
             b = Add0(b);
           
@@ -22,7 +22,7 @@ namespace Laba1_2 {
             var sum = new ulong[0];
             sum = AddLong(a_mass, b_mass);
             string summ = ToStr(sum);
-            Console.WriteLine("Summ= " + summ);
+            Console.WriteLine("Sum= " + summ);
             //sub
             var sub = new ulong[0];
             sub = SubLong(a_mass, b_mass);
@@ -36,6 +36,14 @@ namespace Laba1_2 {
             //LongCmp
             var Cmp = new ulong[0];
             Cmp = LongCmp(a_mass, b_mass);
+
+
+            //Multi
+            var mult = new ulong[0];
+            mult = Multi(a_mass, b_mass);
+            string multi = ToStr(mult);
+            Console.WriteLine("Multiply= " + multi);
+
 
 
 
@@ -161,7 +169,48 @@ namespace Laba1_2 {
 
             return null;
         }
+
+        private static ulong[] LongMulOneDigit(ulong[] a, ulong b) {
+            ulong carry = 0;
+            ulong[] c = new ulong[a.Length + 1];
+            for (int i=0; i< a.Length; i++) {
+                ulong p = a[i] * b + carry;
+                carry = p >> 32;
+                c[i] = p & 0xffffffff;
+            }
+            c[a.Length] = carry;
+            return c;
+        }
+
+        private static ulong[] LongShiftDigitsToHigh(ulong[] a, int b) {
+            ulong[] p = new ulong[a.Length + b];
+            for (int i=0; i < a.Length; i++) {
+                p[i + b] = a[i];
+            }
+            return p;
+        
+        }
+
+        public static ulong[] Multi(ulong[] a, ulong[] b) {
+            int max = 0;
+            if (a.Length < b.Length) { max = b.Length; }
+            else { max = a.Length; };
+            Array.Resize(ref a, max);
+            Array.Resize(ref b, max);
+            ulong[] c = new ulong[2 * max];
+            ulong[] temp = new ulong[a.Length];
+            for (int i=0; i < a.Length; i++) {
+                 temp = LongMulOneDigit(a, b[i]);
+                 LongShiftDigitsToHigh(temp, i);
+                 c = AddLong(c, temp);
+            
+            }
+            return c;
+        }
     }
+
+
+
 }
 
 
