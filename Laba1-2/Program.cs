@@ -268,10 +268,8 @@ namespace Laba1_2 {
         private static int BitLength(ulong[] a) {
             int i = a.Length - 1;
             int b = 0;
-            while (a[i] == 0) {
-                if (i < 0)
-                    return 0;
-                i--;
+            for (i = a.Length - 1; a[i] == 0; i--) {
+                if (i < 0 ) { return 0; };
             }
             var k = a[i];
             while (k > 0) {
@@ -372,7 +370,44 @@ namespace Laba1_2 {
 
 
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
