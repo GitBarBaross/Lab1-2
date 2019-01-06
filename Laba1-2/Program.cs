@@ -10,7 +10,7 @@ namespace Laba1_2 {
         static void Main(string[] args) {
 
             string a = "D26D92F6422BE72AE738680C5669D64CEED3F48705CB19AB30F84CFCEEE17C5D";
-            string b = "861EC03A2A28C174EB69A7FCD2B53169944C11F4899B29F5A31832AB2BA37C86";
+            string b = "861";
             a = Add0(a);
             b = Add0(b);
 
@@ -56,8 +56,10 @@ namespace Laba1_2 {
             var di = new ulong[0];
             di = Div(a_mass, b_mass);
             string div = ToStr(di);
-            Console.WriteLine("Division = " + div);
+            Console.WriteLine("Division = " + div); 
 
+
+      
 
 
 
@@ -223,19 +225,32 @@ namespace Laba1_2 {
             }
             return c;
         }
+        
+        
 
-        private static int BitLength(ulong[] a) {
-            for (int i = a.Length-1; a[i] == 0; i--) {
-                if (i < 0) { return 0; }
-            }
+
+
+            private static int BitLength(ulong[] a) {
+            int i = a.Length  - 1;
             int b = 0;
-            int k = a.Length - 1;
-            for (b = 0; a[k] > 0; a[k] = a[k] >> 1) {
-                b++;
+        
+             for ( i = a.Length-1; a[i] == 0; i--) {
+                 if (i < 0) { return 0; }
+             }
+             
+            var k = a[i];
+            while (k>0) {
+            b++;
+            k= k >> 1;
             }
-            b = b + 32 * k;
-            return b;
-        }
+             
+             b = b + 32 * i;
+             return b;
+         }
+         
+        
+
+
 
         private static ulong[] LongShiftBitsToHigh(ulong[] a, int b) {
             int p = b / 32;
@@ -278,10 +293,8 @@ namespace Laba1_2 {
             return ans;
 
         }
-
-
-
-
+        
+        
 
 
 
