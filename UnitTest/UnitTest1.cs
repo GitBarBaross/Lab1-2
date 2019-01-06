@@ -87,7 +87,7 @@ namespace UnitTest {
             Assert.AreEqual(c, actualResult);
         }
 
-        /*
+        
         [Test]
         [TestCase("ABABABABAABABABABABABAABABABABABABAABAB", "ABABABABAABABABABABABAABABABABABABAABAB", "1")]
         [TestCase("ABABABABAABABABABABABAABABABABABABAABAB", "1", "ABABABABAABABABABABABAABABABABABABAABAB")]
@@ -104,7 +104,7 @@ namespace UnitTest {
 
             var actualResult = Program.ToStr(Program.Div(aa, bb));
             Assert.AreEqual(c, actualResult);
-        }*/
+        }
 
         [Test]
         [TestCase("FFFFFFFFFFFFFFFFFFFFFFFFF", "0", "1")]
@@ -125,7 +125,7 @@ namespace UnitTest {
             bb = Program.ToArr(b, bb);
 
 
-            var actualResult = Program.Gorner(aa, bb);
+            var actualResult = Program.ToStr (Program.Gorner(aa, bb));
             Assert.AreEqual(c, actualResult);
 
 

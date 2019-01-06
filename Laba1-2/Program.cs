@@ -9,8 +9,8 @@ namespace Laba1_2 {
     public class Program {
         static void Main(string[] args) {
 
-            string a = "D26D92F6422BE72AE738680C5669D64CEED3F48705CB19AB30F84CFCEEE17C5D";
-            string b = "861";
+            string a = "2";
+            string b = "1";
             a = Add0(a);
             b = Add0(b);
 
@@ -31,7 +31,8 @@ namespace Laba1_2 {
             bool q;
 
             if (q = LongCmp(a_mass, b_mass) != -1) {
-                Console.WriteLine("Sub= " + subs);
+                if (q = LongCmp(a_mass, b_mass) == 0) { Console.WriteLine("Sub= 0"); }
+                else { Console.WriteLine("Sub= " + subs); };
             }
             else { Console.WriteLine("you have negative number" + '\n'); };
 
@@ -52,14 +53,23 @@ namespace Laba1_2 {
             string multi = ToStr(mult);
             Console.WriteLine("Multiply= " + multi);
 
+
+
             //Div
             var di = new ulong[0];
             di = Div(a_mass, b_mass);
             string div = ToStr(di);
-            Console.WriteLine("Division = " + div); 
+            Console.WriteLine("Division = " + div);
+
+            //Gorner
+            var go = new ulong[0];
+            go = Gorner(a_mass, b_mass);
+            string gor = ToStr(go);
+            Console.WriteLine("Gorner = " + gor);
+           
 
 
-      
+
 
 
 
@@ -111,6 +121,16 @@ namespace Laba1_2 {
 
         }
 
+        public static ulong[] Del0(ulong[] a) {
+            int i = a.Length - 1;
+            while (a[i] == 0) {
+                i--;
+            }
+            ulong[] b = new ulong[i + 1];
+            Array.Copy(a, b, i + 1);
+            return b;
+        }
+
         public static ulong[] AddLong(ulong[] a, ulong[] b) {
             ulong carry = 0;
             int max = 0;
@@ -157,36 +177,51 @@ namespace Laba1_2 {
 
 
 
-        public static int LongCmp(ulong[] a, ulong[] b) {
-            
-            
-            ulong borrow = 0;
-            ulong borrow1 = 0;
+        /* public static int LongCmp(ulong[] a, ulong[] b) {
+
+
+             ulong borrow = 0;
+             ulong borrow1 = 0;
+             int max = 0;
+             if (a.Length < b.Length) { max = b.Length; }
+             else { max = a.Length; };
+             Array.Resize(ref a, max + 1);
+             Array.Resize(ref b, max + 1);
+             var diff = new ulong[max];
+             for (int i = 0; i < max; i++) {
+                 ulong p = a[i] - b[i] - borrow;
+                 diff[i] = p & 0xffffffff;
+                 if (b[i] < a[i]) { borrow = 0; }
+                 else { borrow = 1; };
+
+             }
+             if (b[max - 1] <= a[max - 1]) { borrow1 = 0; }
+             else { borrow1 = 1; };
+
+             if (borrow == 0) {  return 1 ; };
+
+             if (borrow == 1 && a[max] - b[max] - borrow1 == 0) {  return 0; }
+
+
+
+
+             return -1;
+         }*/
+        static int LongCmp(ulong[] a, ulong[] b) {
             int max = 0;
             if (a.Length < b.Length) { max = b.Length; }
             else { max = a.Length; };
-            Array.Resize(ref a, max + 1);
-            Array.Resize(ref b, max + 1);
-            var diff = new ulong[max];
-            for (int i = 0; i < max; i++) {
-                ulong p = a[i] - b[i] - borrow;
-                diff[i] = p & 0xffffffff;
-                if (b[i] < a[i]) { borrow = 0; }
-                else { borrow = 1; };
-
+            Array.Resize(ref a, max);
+            Array.Resize(ref b, max);
+            for (int i = a.Length - 1; i > -1; i--) { 
+                if (a[i] < b[i]) { return -1; }
+                if (a[i] > b[i]) { return 1; }
             }
-            if (b[max - 1] <= a[max - 1]) { borrow1 = 0; }
-            else { borrow1 = 1; };
-
-            if (borrow == 0) {  return 1 ; };
-
-            if (borrow == 1 && a[max] - b[max] - borrow1 == 0) {  return 0; }
-
-
-
-
-            return -1;
+            
+            return 0;
         }
+
+
 
         private static ulong[] LongMulOneDigit(ulong[] a, ulong b) {
             ulong carry = 0;
@@ -225,30 +260,35 @@ namespace Laba1_2 {
             }
             return c;
         }
-        
-        
 
 
 
-            private static int BitLength(ulong[] a) {
-            int i = a.Length  - 1;
+
+
+        private static int BitLength(ulong[] a) {
+            int i = a.Length - 1;
             int b = 0;
-        
-             for ( i = a.Length-1; a[i] == 0; i--) {
-                 if (i < 0) { return 0; }
-             }
-             
-            var k = a[i];
-            while (k>0) {
-            b++;
-            k= k >> 1;
+            while (a[i] == 0) {
+                if (i < 0)
+                    return 0;
+                i--;
             }
-             
-             b = b + 32 * i;
-             return b;
-         }
+            var k = a[i];
+            while (k > 0) {
+                b++;
+                k = k >> 1;
+            }
+
+            b = b + 32 * i;
+            return b;
+        }
          
+
         
+
+
+
+
 
 
 
@@ -293,11 +333,31 @@ namespace Laba1_2 {
             return ans;
 
         }
+
         
-        
 
-
-
+        public static ulong[] Gorner(ulong[] a, ulong[] b) {
+            string strb = ToStr(b);
+            ulong[] c = new ulong[1];
+            c[0] = 0x1;
+            ulong[][] p = new ulong[16][];
+            p[0] = new ulong[1] { 1 };
+            p[1] = a;
+            for (int i = 2; i < 16; i++) {
+                p[i] = Multi(p[i - 1], a);
+                p[i] = Del0(p[i]);
+            }
+            for (int i = 0; i < strb.Length; i++) {
+                c = Multi( c, p[Convert.ToInt32(strb[i].ToString(), 16)]);
+                if (i != strb.Length - 1) {
+                    for (int k = 1; k <= 4; k++) {
+                        c = Multi(c, c);
+                        c = Del0(c);
+                    }
+                }
+            }
+            return c;
+        }
 
 
 
