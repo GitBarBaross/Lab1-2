@@ -9,8 +9,8 @@ namespace Laba1_2 {
     public class Program {
         static void Main(string[] args) {
 
-            string a = "2";
-            string b = "1";
+            string a = "A";
+            string b = "5";
             a = Add0(a);
             b = Add0(b);
 
@@ -66,6 +66,13 @@ namespace Laba1_2 {
             go = Gorner(a_mass, b_mass);
             string gor = ToStr(go);
             Console.WriteLine("Gorner = " + gor);
+
+
+            //GCD
+            var GC = new ulong[0];
+            GC = gcd(a_mass, b_mass);
+            string GCD = ToStr(GC);
+            Console.WriteLine("GCD = " + GCD);
            
 
 
@@ -355,6 +362,59 @@ namespace Laba1_2 {
                 }
             }
             return c;
+        }
+
+
+
+
+
+
+
+        ////////////////////////////////////////SECOND LAB///////////////////////////////////////////
+        ///
+       
+
+        public static ulong[] gcd(ulong[] a, ulong[] b) {
+            ulong[] Min, Max;
+            var aa = a;
+            var bb = b;
+            int min; 
+            if (a.Length < b.Length ) { min = a.Length; }
+            else { min = b.Length;  };
+            ulong[] p = new ulong[min];
+            p[0] = 0x1;
+            string tt = "2";
+            tt = Add0(tt);
+            ulong[] x = new ulong[tt.Length /8];
+            ulong[] t = ToArr(tt, x);
+          
+
+            while (((aa[0] & 1) == 0) && ((bb[0] & 1) == 0)) {
+                aa =Div(aa, t);
+                bb = Div(bb, t);
+                p = Multi(p, t);
+            }
+            while ((aa[0] & 1) == 0) {
+                aa = Div(aa, t);
+            }
+            while (bb[0] != 0) {
+                while ((bb[0] & 1) == 0) {
+                    bb= Div(bb, t);
+                }
+                var CMP = LongCmp(aa, bb);                
+                if (CMP >= 0) {
+                     Min = bb;
+                     Max = aa;
+                }
+                else {
+                    Min = aa;
+                    Max = bb;
+                }
+                aa = Min;
+                bb = (SubLong(Max, Min));
+            }
+            p = Multi(p, aa);
+            return p;
         }
 
 
