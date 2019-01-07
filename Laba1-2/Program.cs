@@ -20,7 +20,7 @@ namespace Laba1_2 {
             a_mass = ToArr(a, a_mass);
             b_mass = ToArr(b, b_mass);
 
-           /* //sum
+            //sum
             var sum = new ulong[0];
             sum = AddLong(a_mass, b_mass);
             string summ = ToStr(sum);
@@ -81,15 +81,9 @@ namespace Laba1_2 {
             ba = BarrettReduction(a_mass, b_mass);
             string bar = ToStr(ba);
             Console.WriteLine("Barret = " + bar);
-            */
+            
 
-            //LongModPowerBarrett
-            n = Add0(n);
-            var N = new ulong[n.Length / 8];
-            N = ToArr(n,N);
-            ulong[] Lo = LongModPowerBarrett(a_mass, b_mass, N);
-            string Long = ToStr(Lo);
-            Console.WriteLine("Long = " + Long);
+            
 
 
 
@@ -443,17 +437,60 @@ namespace Laba1_2 {
             return r;
         }
 
+        public static ulong[] Mod(ulong[] a, ulong[] b) {
+            var p = BitLength(b);
+            var ans = a;
+            ulong[] x = new ulong[a.Length];
+            ulong[] q = new ulong[a.Length];
+            ulong[] y = new ulong[a.Length];            
+            x[0] = 0x1;
 
-        
-
-        public static ulong[] LongModPowerBarrett(ulong[] a, ulong[] b, ulong [] c) {
-            ulong[] pw = Gorner(a, b);
-            ulong[] mod = BarrettReduction(pw, c);
-            return mod;    
 
 
+            while (LongCmp(ans, b) >= 0) {
+                var t = BitLength(ans);
+                y = LongShiftBitsToHigh(b, t - p);
+                if (LongCmp(ans, y) == -1) {
+                    t = t - 1;
+                    y = LongShiftBitsToHigh(b, t - p);
+                }
+                ans = SubLong(ans, y);
+                q = AddLong(q, LongShiftBitsToHigh(x, t - p));
+            }
+
+
+
+            return ans;
         }
-       
+
+        public static ulong[] ModPower(ulong[] a, ulong[] b, ulong[] mod) {
+            string strb = ToStr (b);
+            ulong[] c = new ulong[1];
+            c[0] = 0x1;
+            ulong[][] p = new ulong[16][];
+            p[0] = new ulong[1] { 1 };
+            p[1] = a;
+            for (int i = 2; i < 16; i++) {
+                p[i] = Multi(p[i - 1], a);
+                p[i] = Del0(p[i]);
+            }
+
+            for (int i = 0; i < strb.Length; i++) {
+                c = Multi(c, p[Convert.ToInt32(strb[i].ToString(), 16)]);
+                c = Mod(c, mod);
+                if (i != strb.Length - 1) {
+                    for (int k = 1; k <= 4; k++) {
+                        c = Multi(c, c);
+                        c = Mod(c, mod);
+                        c = Del0(c);
+                    }
+                }
+            }
+            return c;
+        }
+
+
+
     }    
 }
 
