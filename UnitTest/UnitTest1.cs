@@ -144,12 +144,56 @@ namespace UnitTest {
 
             var actualResult = Program.ToStr(Program.gcd(aa, bb));
             Assert.AreEqual(c, actualResult);
+        }
 
 
 
+        [Test]
+        [TestCase("3540A", "192", "EE")]
+        [TestCase("5", "3", "2")]
+        [TestCase("4", "3", "1")]
+        [TestCase("2B", "7", "1")]
+        [TestCase("AFAFAFAF", "FFFF", "5F5F")]
+        [TestCase("10000000", "FFFF", "1000")]
+        [TestCase("FFFFFAAAAFF32549877523487", "3F2782F60D0AD", "3D70A6B5AD60E")]
+        [TestCase("8882FABDA2031571278293379", "3F2782F60D0AD", "7328466E5199")]
+        [TestCase("11111FFFFF764239156912765", "3F2782F60D0AD", "388C3EF9AE13")]
+        [TestCase("E3AE74A8EC74A313C8BED20D4349D9EFBA356FE6E8AD89E21C2D028111C06F422DC8E0F2E5F448830D1D61B5A7AEAC088E31AA290891E06AD83C0786443611AF",
+                  "49FE1165CB7A21D12D6ACEC225285544B36BABD3F8B4DD8D94EDE1A444B9738ADF06CDB40DCAFA87B25A8BECA2D2262A53D8431A119405F0CBEFB83D2AD547CC",
+                  "5B440778A063DA0407E65C6D3D0DA219FF26C6AFE8EF1395D635D94439414A190B477D6BC9358EBF60DBDEFBF38398992A8E0DAD3D5CE98746CDECEC3B63A4B")]
+        [TestCase("17EFC320375C595D14B25E46B1D50B88D05E24FE722E536A32672BBD775105497475BB33FDF7965B087D34B7B22C16030619190621184AACBB415078BD9E199",
+                  "3F304DFA2BBDA4896B3683D9F1F27BA74983B9A63B7926E2D2D0D6E75F863560",
+"B81D9E67DCA2DB4F529F29234D0ECF650B61BF04B3F7A03B8B7D51F86B77FF9")]
 
+        public void BarretTest(string a, string b, string c) {
+            a = Program.Add0(a);
+            b = Program.Add0(b);
+            var aa = new ulong[a.Length / 8];
+            var bb = new ulong[b.Length / 8];
+            aa = Program.ToArr(a, aa);
+            bb = Program.ToArr(b, bb);
 
+            var actualResult = Program.ToStr(Program.BarrettReduction(aa, bb));
+            Assert.AreEqual(c, actualResult);
+        }
 
+        [Test]
+        [TestCase("3", "2", "4", "1")]
+
+        public void LongModPowerBarrettTest(string a, string b, string n, string d) {
+            a = Program.Add0(a);
+            b = Program.Add0(b);
+            var aa = new ulong[a.Length / 8];
+            var bb = new ulong[b.Length / 8];
+            aa = Program.ToArr(a, aa);
+            bb = Program.ToArr(b, bb);
+
+            n = Program.Add0(n);
+            var N = new ulong[n.Length / 8];
+            N = Program.ToArr(n, N);
+
+            var actualResult = Program.ToStr(Program.LongModPowerBarrett (aa, bb, N));
+            Assert.AreEqual(d, actualResult);
         }
     }
 }    

@@ -9,8 +9,9 @@ namespace Laba1_2 {
     public class Program {
         static void Main(string[] args) {
 
-            string a = "A";
-            string b = "5";
+            string a = "7";
+            string b = "2";
+            string n = "6";
             a = Add0(a);
             b = Add0(b);
 
@@ -19,7 +20,7 @@ namespace Laba1_2 {
             a_mass = ToArr(a, a_mass);
             b_mass = ToArr(b, b_mass);
 
-            //sum
+           /* //sum
             var sum = new ulong[0];
             sum = AddLong(a_mass, b_mass);
             string summ = ToStr(sum);
@@ -73,7 +74,24 @@ namespace Laba1_2 {
             GC = gcd(a_mass, b_mass);
             string GCD = ToStr(GC);
             Console.WriteLine("GCD = " + GCD);
-           
+
+
+            //Barrett
+            var ba = new ulong[0];
+            ba = BarrettReduction(a_mass, b_mass);
+            string bar = ToStr(ba);
+            Console.WriteLine("Barret = " + bar);
+            */
+
+            //LongModPowerBarrett
+            n = Add0(n);
+            var N = new ulong[n.Length / 8];
+            N = ToArr(n,N);
+            ulong[] Lo = LongModPowerBarrett(a_mass, b_mass, N);
+            string Long = ToStr(Lo);
+            Console.WriteLine("Long = " + Long);
+
+
 
 
 
@@ -184,47 +202,18 @@ namespace Laba1_2 {
 
 
 
-        /* public static int LongCmp(ulong[] a, ulong[] b) {
 
-
-             ulong borrow = 0;
-             ulong borrow1 = 0;
-             int max = 0;
-             if (a.Length < b.Length) { max = b.Length; }
-             else { max = a.Length; };
-             Array.Resize(ref a, max + 1);
-             Array.Resize(ref b, max + 1);
-             var diff = new ulong[max];
-             for (int i = 0; i < max; i++) {
-                 ulong p = a[i] - b[i] - borrow;
-                 diff[i] = p & 0xffffffff;
-                 if (b[i] < a[i]) { borrow = 0; }
-                 else { borrow = 1; };
-
-             }
-             if (b[max - 1] <= a[max - 1]) { borrow1 = 0; }
-             else { borrow1 = 1; };
-
-             if (borrow == 0) {  return 1 ; };
-
-             if (borrow == 1 && a[max] - b[max] - borrow1 == 0) {  return 0; }
-
-
-
-
-             return -1;
-         }*/
         static int LongCmp(ulong[] a, ulong[] b) {
             int max = 0;
             if (a.Length < b.Length) { max = b.Length; }
             else { max = a.Length; };
             Array.Resize(ref a, max);
             Array.Resize(ref b, max);
-            for (int i = a.Length - 1; i > -1; i--) { 
+            for (int i = a.Length - 1; i > -1; i--) {
                 if (a[i] < b[i]) { return -1; }
                 if (a[i] > b[i]) { return 1; }
             }
-            
+
             return 0;
         }
 
@@ -249,6 +238,23 @@ namespace Laba1_2 {
             }
             return p;
 
+        }
+
+        private static ulong[] ShiftBitsToLow(ulong[] a, int b) {
+            int t = b / 32;
+            int n = b - t * 32;
+            ulong[] c = new ulong[a.Length - t];
+            ulong p, q = 0;
+            for (int i = t; i < a.Length - 1; i++) {
+                p = a[i];
+                q = a[i + 1];
+                p = p >> n;
+                q = q << (64 - n);
+                q = q >> (64 - n);
+                c[i - t] = p | (q << 32 - n);
+            }
+            c[a.Length - t - 1] = a[a.Length - 1] >> n;
+            return c;
         }
 
         public static ulong[] Multi(ulong[] a, ulong[] b) {
@@ -276,7 +282,7 @@ namespace Laba1_2 {
             int i = a.Length - 1;
             int b = 0;
             for (i = a.Length - 1; a[i] == 0; i--) {
-                if (i < 0 ) { return 0; };
+                if (i < 0) { return 0; };
             }
             var k = a[i];
             while (k > 0) {
@@ -287,9 +293,9 @@ namespace Laba1_2 {
             b = b + 32 * i;
             return b;
         }
-         
-
         
+
+
 
 
 
@@ -322,7 +328,7 @@ namespace Laba1_2 {
             ulong[] y = new ulong[a.Length];
             x[0] = 0x1;
 
-            
+
             while (LongCmp(p, b) >= 0) {
                 var z = BitLength(p);
                 y = LongShiftBitsToHigh(b, z - k);
@@ -333,13 +339,13 @@ namespace Laba1_2 {
                 p = SubLong(p, y);
                 ans = AddLong(ans, LongShiftBitsToHigh(x, z - k));
             }
-            
-            
+
+
             return ans;
 
         }
 
-        
+
 
         public static ulong[] Gorner(ulong[] a, ulong[] b) {
             string strb = ToStr(b);
@@ -353,7 +359,7 @@ namespace Laba1_2 {
                 p[i] = Del0(p[i]);
             }
             for (int i = 0; i < strb.Length; i++) {
-                c = Multi( c, p[Convert.ToInt32(strb[i].ToString(), 16)]);
+                c = Multi(c, p[Convert.ToInt32(strb[i].ToString(), 16)]);
                 if (i != strb.Length - 1) {
                     for (int k = 1; k <= 4; k++) {
                         c = Multi(c, c);
@@ -372,25 +378,25 @@ namespace Laba1_2 {
 
         ////////////////////////////////////////SECOND LAB///////////////////////////////////////////
         ///
-       
+
 
         public static ulong[] gcd(ulong[] a, ulong[] b) {
             ulong[] Min, Max;
             var aa = a;
             var bb = b;
-            int min; 
-            if (a.Length < b.Length ) { min = a.Length; }
-            else { min = b.Length;  };
+            int min;
+            if (a.Length < b.Length) { min = a.Length; }
+            else { min = b.Length; };
             ulong[] p = new ulong[min];
             p[0] = 0x1;
             string tt = "2";
             tt = Add0(tt);
-            ulong[] x = new ulong[tt.Length /8];
+            ulong[] x = new ulong[tt.Length / 8];
             ulong[] t = ToArr(tt, x);
-          
+
 
             while (((aa[0] & 1) == 0) && ((bb[0] & 1) == 0)) {
-                aa =Div(aa, t);
+                aa = Div(aa, t);
                 bb = Div(bb, t);
                 p = Multi(p, t);
             }
@@ -399,12 +405,12 @@ namespace Laba1_2 {
             }
             while (bb[0] != 0) {
                 while ((bb[0] & 1) == 0) {
-                    bb= Div(bb, t);
+                    bb = Div(bb, t);
                 }
-                var CMP = LongCmp(aa, bb);                
+                var CMP = LongCmp(aa, bb);
                 if (CMP >= 0) {
-                     Min = bb;
-                     Max = aa;
+                    Min = bb;
+                    Max = aa;
                 }
                 else {
                     Min = aa;
@@ -417,15 +423,38 @@ namespace Laba1_2 {
             return p;
         }
 
+       
+
+        public static ulong[] BarrettReduction(ulong[] x, ulong[] n) {
+            ulong[] u = new ulong[1];
+            var k = 2 * BitLength(n);
+            var b = new ulong[] { 0x01 };
+            var up = LongShiftBitsToHigh(b, k);
+            u = Div(up, n);      
+            var p = BitLength(n);
+            var q = ShiftBitsToLow(x, p - 1);
+            q = Multi(q, u);
+            q = ShiftBitsToLow(q, p + 1);
+
+            var r = SubLong(x, Multi(q, n));
+            if (LongCmp(r, n) >= 0) {
+                r = SubLong(r, n);
+            }
+            return r;
+        }
 
 
+        
+
+        public static ulong[] LongModPowerBarrett(ulong[] a, ulong[] b, ulong [] c) {
+            ulong[] pw = Gorner(a, b);
+            ulong[] mod = BarrettReduction(pw, c);
+            return mod;    
 
 
-
-
-
-
-    } 
+        }
+       
+    }    
 }
 
 
