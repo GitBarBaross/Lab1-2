@@ -9,9 +9,9 @@ namespace Laba1_2 {
     public class Program {
         static void Main(string[] args) {
 
-            string a = "7";
-            string b = "2";
-            string n = "6";
+            string a = "2E151CB";
+            string b = "10C2";
+            string n = "23413";
             a = Add0(a);
             b = Add0(b);
 
@@ -20,70 +20,79 @@ namespace Laba1_2 {
             a_mass = ToArr(a, a_mass);
             b_mass = ToArr(b, b_mass);
 
-            //sum
-            var sum = new ulong[0];
-            sum = AddLong(a_mass, b_mass);
-            string summ = ToStr(sum);
-            Console.WriteLine("Sum= " + summ);
-            //sub
-            var sub = new ulong[0];
-            sub = SubLong(a_mass, b_mass);
-            string subs = ToStr(sub);
-            bool q;
+            /* //sum
+             var sum = new ulong[0];
+             sum = AddLong(a_mass, b_mass);
+             string summ = ToStr(sum);
+             Console.WriteLine("Sum= " + summ);
+             //sub
+             var sub = new ulong[0];
+             sub = SubLong(a_mass, b_mass);
+             string subs = ToStr(sub);
+             bool q;
 
-            if (q = LongCmp(a_mass, b_mass) != -1) {
-                if (q = LongCmp(a_mass, b_mass) == 0) { Console.WriteLine("Sub= 0"); }
-                else { Console.WriteLine("Sub= " + subs); };
-            }
-            else { Console.WriteLine("you have negative number" + '\n'); };
-
-
-            //LongCmp
-
-            int Cmp = LongCmp(a_mass, b_mass);
-            if (Cmp == 1) { Console.WriteLine("a > b "); };
-            if (Cmp == 0) { Console.WriteLine("a = b "); };
-            if (Cmp == -1) { Console.WriteLine("a < b "); };
+             if (q = LongCmp(a_mass, b_mass) != -1) {
+                 if (q = LongCmp(a_mass, b_mass) == 0) { Console.WriteLine("Sub= 0"); }
+                 else { Console.WriteLine("Sub= " + subs); };
+             }
+             else { Console.WriteLine("you have negative number" + '\n'); };
 
 
+             //LongCmp
 
-
-            //Multi
-            var mult = new ulong[0];
-            mult = Multi(a_mass, b_mass);
-            string multi = ToStr(mult);
-            Console.WriteLine("Multiply= " + multi);
+             int Cmp = LongCmp(a_mass, b_mass);
+             if (Cmp == 1) { Console.WriteLine("a > b "); };
+             if (Cmp == 0) { Console.WriteLine("a = b "); };
+             if (Cmp == -1) { Console.WriteLine("a < b "); };
 
 
 
-            //Div
-            var di = new ulong[0];
-            di = Div(a_mass, b_mass);
-            string div = ToStr(di);
-            Console.WriteLine("Division = " + div);
 
-            //Gorner
-            var go = new ulong[0];
-            go = Gorner(a_mass, b_mass);
-            string gor = ToStr(go);
-            Console.WriteLine("Gorner = " + gor);
+             //Multi
+             var mult = new ulong[0];
+             mult = Multi(a_mass, b_mass);
+             string multi = ToStr(mult);
+             Console.WriteLine("Multiply= " + multi);
 
 
-            //GCD
-            var GC = new ulong[0];
-            GC = gcd(a_mass, b_mass);
-            string GCD = ToStr(GC);
-            Console.WriteLine("GCD = " + GCD);
+
+             //Div
+             var di = new ulong[0];
+             di = Div(a_mass, b_mass);
+             string div = ToStr(di);
+             Console.WriteLine("Division = " + div);
+
+             //Gorner
+             var go = new ulong[0];
+             go = Gorner(a_mass, b_mass);
+             string gor = ToStr(go);
+             Console.WriteLine("Gorner = " + gor);
 
 
-            //Barrett
-            var ba = new ulong[0];
-            ba = BarrettReduction(a_mass, b_mass);
-            string bar = ToStr(ba);
-            Console.WriteLine("Barret = " + bar);
-            
+             //GCD
+             var GC = new ulong[0];
+             GC = gcd(a_mass, b_mass);
+             string GCD = ToStr(GC);
+             Console.WriteLine("GCD = " + GCD);
 
-            
+
+             //Barrett
+             var ba = new ulong[0];
+             ba = BarrettReduction(a_mass, b_mass);
+             string bar = ToStr(ba);
+             Console.WriteLine("Barret = " + bar);*/
+
+            //GornerBarrett
+            n = Add0(n);
+            var N = new ulong[n.Length / 8];
+            N = ToArr(n, N);
+            var GB = new ulong[0];
+            GB = GornerBarrett(a_mass, b_mass, N);
+            string gb = ToStr(GB);
+            Console.WriteLine("otvet = " + gb);
+
+
+
 
 
 
@@ -491,7 +500,45 @@ namespace Laba1_2 {
 
 
 
-    }    
+        public static ulong[] GornerBarrett(ulong[] a, ulong[] b, ulong[] n) {
+            string strb = ToStr(b);
+            ulong[] z = new ulong[1];
+            z[0] = 0x1;
+            ulong[] r = new ulong[1];
+            r[0] = 0x1;
+            ulong[] c = new ulong[1];
+            c[0] = 0x1;
+            ulong[][] p = new ulong[16][];
+            p[0] = new ulong[1] { 1 };
+            p[1] = a;
+            for (int i = 2; i < 16; i++) {
+                p[i] = Multi(p[i - 1], a);
+                p[i] = Del0(p[i]);
+            }
+            for (int i = 0; i < strb.Length; i++) {
+                c = Multi(c, p[Convert.ToInt32(strb[i].ToString(), 16)]);
+                if (i != strb.Length - 1) {
+                    for (int k = 1; k <= 4; k++) {
+                        z = c;
+                        z = Multi(z, r);
+                        c = Multi(c, c);
+                        if (i == 0) { r = BarrettReduction(c, n); }
+                        else { r = BarrettReduction(z, n); };
+                        
+                       
+                        c = Del0(c);
+                        r = Del0(r);
+                        
+                    }
+                }
+            }
+            return r;
+        }
+
+
+
+
+    }
 }
 
 
