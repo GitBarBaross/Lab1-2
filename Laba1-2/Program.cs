@@ -437,8 +437,8 @@ namespace Laba1_2 {
         }
 
 
-        public static ulong[] BarrettReduction(ulong[] x, ulong[] n) {
-            var u = U(n);     
+        public static ulong[] BarrettReduction(ulong[] x, ulong[] n, ulong[] u) {
+           // var u = U(n);     
             var p = BitLength(n);
             var q = ShiftBitsToLow(x, p - 1);
             q = Multi(q, u);
@@ -529,14 +529,21 @@ namespace Laba1_2 {
 
         public static ulong[] GornerBarrett(ulong[] a, ulong[] b, ulong[] n) {
             string strb = ToStringBit(b);
+            var u = U(n);
            
             ulong[] c = new ulong[1];
             c[0] = 0x1;
 
-            for (int i = 0; i < strb.Length; i++) {
-                if (strb[i] == 1) { c = BarrettReduction(Multi(c, a), n); }
+            for (int i = 0; i < strb.Length-1; i++) {
+                if (strb[i] == 1) {
+                    c = BarrettReduction(Multi(c, a), n, u);
+                    c = Del0(c);
+                }
 
-                else { a = BarrettReduction(Multi(a, a), n); };
+                
+                a = BarrettReduction(Multi(a, a), n, u);
+                a = Del0(a);
+                
             }
             return c;
         }
