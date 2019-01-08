@@ -535,7 +535,7 @@ namespace Laba1_2 {
             c[0] = 0x1;
 
             for (int i = 0; i < strb.Length-1; i++) {
-                if (strb[i] == 1) {
+                if (strb[i] == '1') {
                     c = BarrettReduction(Multi(c, a), n, u);
                     c = Del0(c);
                 }
