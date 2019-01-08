@@ -426,14 +426,19 @@ namespace Laba1_2 {
             return p;
         }
 
-       
 
-        public static ulong[] BarrettReduction(ulong[] x, ulong[] n) {
+        public static ulong[] U(ulong[] n) {
             ulong[] u = new ulong[1];
             var k = 2 * BitLength(n);
             var b = new ulong[] { 0x01 };
             var up = LongShiftBitsToHigh(b, k);
-            u = Div(up, n);      
+            u = Div(up, n);
+            return u;
+        }
+
+
+        public static ulong[] BarrettReduction(ulong[] x, ulong[] n) {
+            var u = U(n);     
             var p = BitLength(n);
             var q = ShiftBitsToLow(x, p - 1);
             q = Multi(q, u);
@@ -500,39 +505,40 @@ namespace Laba1_2 {
 
 
 
-        public static ulong[] GornerBarrett(ulong[] a, ulong[] b, ulong[] n) {
-            string strb = ToStr(b);
-            ulong[] z = new ulong[1];
-            z[0] = 0x1;
-            ulong[] r = new ulong[1];
-            r[0] = 0x1;
-            ulong[] c = new ulong[1];
-            c[0] = 0x1;
-            ulong[][] p = new ulong[16][];
-            p[0] = new ulong[1] { 1 };
-            p[1] = a;
-            for (int i = 2; i < 16; i++) {
-                p[i] = Multi(p[i - 1], a);
-                p[i] = Del0(p[i]);
-            }
-            for (int i = 0; i < strb.Length; i++) {
-                c = Multi(c, p[Convert.ToInt32(strb[i].ToString(), 16)]);
-                if (i != strb.Length - 1) {
-                    for (int k = 1; k <= 4; k++) {
-                        z = c;
-                        z = Multi(z, r);
-                        c = Multi(c, c);
-                        if (i == 0) { r = BarrettReduction(c, n); }
-                        else { r = BarrettReduction(z, n); };
-                        
-                       
-                        c = Del0(c);
-                        r = Del0(r);
-                        
-                    }
+        public static string ToStringBit(ulong[] a) {
+            string result = "";
+            ulong word;
+            for (int i = 0; i < a.Length - 1; i++) {
+                word = a[i];
+                for (int j = 0; j != 64; j++, word >>= 1) {
+                    ulong bit = word & 1;
+                    result += bit.ToString();
                 }
             }
-            return r;
+
+            word = a[a.Length - 1];
+            for (; word != 0; word >>= 1) {
+                ulong bit = word & 1;
+                result += bit.ToString();
+            }
+            var q = new string(result.ToCharArray().Reverse().ToArray());
+            return q.TrimStart('0');
+        }
+
+
+
+        public static ulong[] GornerBarrett(ulong[] a, ulong[] b, ulong[] n) {
+            string strb = ToStringBit(b);
+           
+            ulong[] c = new ulong[1];
+            c[0] = 0x1;
+
+            for (int i = 0; i < strb.Length; i++) {
+                if (strb[i] == 1) { c = BarrettReduction(Multi(c, a), n); }
+
+                else { a = BarrettReduction(Multi(a, a), n); };
+            }
+            return c;
         }
 
 
